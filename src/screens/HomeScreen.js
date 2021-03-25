@@ -8,7 +8,7 @@ const HomeScreen = ({ navigation }) => {
       <ImageDetails imageSource={require('../../assets/home.jpeg')}
       />
       <View style={styles.space} />
-      <Text style={styles.text}>Love at First Flight</Text>
+      <Text style={styles.text}>Love at First sight</Text>
       <View style={styles.space} />
       <Button
         style={styles.button}
