@@ -19,7 +19,9 @@ const SignUP = () => {
                 style={styles.TextInput}
                     placeholder="Enter First Name"
                     placeholderTextColor="#003f5c"
-                onChangeText={fname => setFirstName(text)}
+                    value={fname}
+                    autoCorrect={false}
+                    onChangeText={(fname) => setFirstName(fname)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -27,8 +29,10 @@ const SignUP = () => {
             <TextInput
                 style={styles.TextInput}
                 placeholderTextColor="#003f5c"
-                placeholder="Enter Last Name"
-                onChangeText={lname => setLastName(text)}
+                    placeholder="Enter Last Name"
+                    value={lname}
+                    autoCorrect={false}
+                onChangeText={(lname) => setLastName(lname)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -36,7 +40,9 @@ const SignUP = () => {
                 <TextInput
                 style={styles.TextInput}    
                 placeholder="Enter Your Email"
-                placeholderTextColor="#003f5c"
+                    placeholderTextColor="#003f5c"
+                    value={email}
+                    autoCorrect={false}
                 onChangeText={(email) => setEmail(email)}
                 />
             </View>
@@ -45,18 +51,24 @@ const SignUP = () => {
                 style={styles.TextInput}
                 placeholder="Enter Password"
                 placeholderTextColor="#003f5c"
-                secureTextEntry={true}
+                    secureTextEntry={true}
+                  
+                    autoCorrect={false}
                 onChangeText={(password) => setConfirmPassword(password)}
                 />
+                {password.length>8?<Text>Password must be 8 character long</Text>:null}
             </View>
             <View style={styles.inputView}>
                 <TextInput
                 style={styles.TextInput}
                 placeholder="Confirm Password"
                 placeholderTextColor="#003f5c"
-                secureTextEntry={true}
+                    secureTextEntry={true}
+                    
+                    autoCorrect={false}
                 onChangeText={(confirmPassword) => setPassword(confirmPassword)}
                 />
+                 {confirmPassword.length>8?<Text>Password must be 8 character long</Text>:null}
             </View>
             <Button
               color="#3c415c"
