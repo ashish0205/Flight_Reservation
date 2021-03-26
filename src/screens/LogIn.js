@@ -18,6 +18,7 @@ const LogIn = ({navigation}) => {
                 style={styles.TextInput}    
                 placeholder="Enter Your Email"
                 placeholderTextColor="#003f5c"
+                 value={email}
                 onChangeText={(email) => setEmail(email)}
                 />
             </View>
@@ -27,6 +28,7 @@ const LogIn = ({navigation}) => {
                 placeholder="Enter Your Password"
                 placeholderTextColor="#003f5c"
                 secureTextEntry={true}
+                value={password}    
                 onChangeText={(password) => setPassword(password)}
                 />
                 </View>
