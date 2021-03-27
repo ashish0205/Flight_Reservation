@@ -5,7 +5,7 @@ import SignUp from "./src/screens/SignUp";
 import LogIn from "./src/screens/LogIn";
 import ForgetPassword from "./src/screens/ForgetPassword";
 import ResponseForgetPassword from "./src/screens/ResponseForgetPassword";
-
+import Profile from "./src/screens/Profile";
 
 const navigator = createStackNavigator(
   {
@@ -13,16 +13,17 @@ const navigator = createStackNavigator(
     SignUp: SignUp,
     LogIn: LogIn,
     ForgetPassword: ForgetPassword,
-    ResponseForgetPassword: ResponseForgetPassword
+    ResponseForgetPassword: ResponseForgetPassword,
+    Profile:Profile
   },
   {
-    initialRouteName: "Home",
-    defaultNavigationOptions: {
+      initialRouteName: "Home",
+      defaultNavigationOptions: {
       title: "App",
     },
 
-    headerMode: "screen",
-    defaultNavigationOptions: {
+      headerMode: "screen",
+      defaultNavigationOptions: {
       cardStyle: { backgroundColor: "#fff" },
     },
   }
