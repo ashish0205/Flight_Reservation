@@ -6,13 +6,14 @@ import LogIn from "./src/screens/LogIn";
 import ForgetPassword from "./src/screens/ForgetPassword";
 import ResponseForgetPassword from "./src/screens/ResponseForgetPassword";
 
+
 const navigator = createStackNavigator(
   {
     Home: HomeScreen,
     SignUp: SignUp,
     LogIn: LogIn,
     ForgetPassword: ForgetPassword,
-    ResponseForgetPassword: ResponseForgetPassword,
+    ResponseForgetPassword: ResponseForgetPassword
   },
   {
     initialRouteName: "Home",
