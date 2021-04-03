@@ -5,10 +5,12 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 import { Icon } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Switch } from "react-native-switch";
+
 import Explore from "./Explore";
 import Trips from "./Trips";
 import Profile from "./Profile";
 import { TextInput } from "react-native-paper";
+
 import axios from "axios";
 import QueryString from "querystring";
 import BlogContext from "../context/blogContext";
@@ -40,118 +42,156 @@ const HomeScreen = ({ navigation }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  return (
-    <View style={styles.row}>
-      <View style={styles.inputWrap}>
-        <TextInput
-          label="Departure"
-          value={departuretext}
-          onChangeText={(dep) => setDepText(dep)}
-          type="flat"
-        />
+  return  (
+      
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.header_text}>Search Your Flight</Text>
       </View>
-      <View style={styles.inputWrap}>
-        <TextInput
-          label="Arrival"
-          value={arrivaltext}
-          onChangeText={(arrival) => setArvText(arrival)}
-        />
-      </View>
-
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.inputdate}>
-          <Text>Departure</Text>
-          <Button onPress={showDatepicker} title="Select Departure Date!" />
-
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
-        <View style={styles.inputdate}>
-          <Text>Return</Text>
-          <Button onPress={showDatepicker} title="Select Return Date!" />
-
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
-      </View>
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.toggle}>
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
+      <View style={styles.footer}>
+      <View style={styles.row}> 
+        <View style={styles.inputWrap}>
+          <TextInput
+            label="Departure"
+            value={departuretext}
+            onChangeText={(dep) => setDepText(dep)}
+            type="flat"
           />
-          <Text>Two Way</Text>
+        </View>
+        <View style={styles.inputWrap}>
+          <TextInput
+            label="Arrival"
+            value={arrivaltext}
+            onChangeText={(arrival) => setArvText(arrival)}
+          />
+        </View>
+
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.inputdate}>
+            <Text>Departure</Text>
+            <Button onPress={showDatepicker} title="Select Departure Date" />
+
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
+          <View style={styles.inputdate}  style={{display: isEnabled ? 'block' : 'none' }} >
+            <Text>Return</Text>
+            <Button onPress={showDatepicker} title="Select Return Date" />
+
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+               
+              />
+            )}
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.toggle}>
+            <Switch
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}                  
+            />
+              <Text>Two Way</Text>
+          </View>        
+        </View>
+        <View style={{ flexDirection: 'row',margin:30 }}>
+        <Button
+        color="#3c415c"
+                title="Search Flights"
+                raised
+                onPress={() => {
+                  console.log("hello world");
+                  axios
+                    .post(
+                      "http://localhost:4000/user/search",
+                      QueryString.stringify({
+                        departure: departuretext,
+                        arrival: arrivaltext,
+                      }),
+                      {
+                        headers: {
+                          "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      // console.log(response.data);
+                      const { data } = response.data;
+                      addBlogPost(data);
+                      navigation.navigate("List");
+                      // console.log("data" + datass.);
+                    })
+                    .catch((err) => console.log("api Erorr: ", err));
+                }}
+        
+        />
         </View>
       </View>
-
-      <Button
-        color="#3c415c"
-        title="Search Flights"
-        raised
-        onPress={() => {
-          console.log("hello world");
-          axios
-            .post(
-              "http://localhost:4000/user/search",
-              QueryString.stringify({
-                departure: departuretext,
-                arrival: arrivaltext,
-              }),
-              {
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-              }
-            )
-            .then((response) => {
-              // console.log(response.data);
-              const { data } = response.data;
-              addBlogPost(data);
-              navigation.navigate("List");
-              // console.log("data" + datass.);
-            })
-            .catch((err) => console.log("api Erorr: ", err));
-        }}
-      />
-    </View>
-  );
+      </View> 
+      </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  row: {
+  container: {
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "flex-start",
-    marginTop: 10,
+    backgroundColor: "#05375a",
   },
-
+  
+    row: {
+      flex: 1,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+      marginTop: 10,
+    },
+  
+  header: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    marginTop:10
+  },
+  header_text: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color:'white'
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    marginTop:50
+  },
   inputWrap: {
-    width: "45%",
-    margin: 10,
+    width: '45%',
+    margin:10
   },
   inputdate: {
     margin: 10,
     color: "#6a4595",
+    
   },
   inputcvv: {
     fontSize: 14,
@@ -159,8 +199,8 @@ const styles = StyleSheet.create({
     color: "#6a4595",
   },
   toggle: {
-    margin: 10,
-  },
+    margin: 30,    
+  }
 });
 const TabNavigator = createMaterialBottomTabNavigator({
   HomeScreen: {
@@ -187,7 +227,7 @@ const TabNavigator = createMaterialBottomTabNavigator({
   Explore: {
     screen: Explore,
     navigationOptions: {
-      tabBarLabel: "Explore",
+      tabBarLabel: "Wishlist",
       activeColor: "#ff0000",
       inactiveColor: "#000000",
       shifting: false,
@@ -196,8 +236,8 @@ const TabNavigator = createMaterialBottomTabNavigator({
       tabBarIcon: () => (
         <View>
           <Icon
-            name={"explore"}
-            type={"MaterialIcons"}
+            name={"heart"}
+            type={"font-awesome"}
             size={25}
             style={{ color: "#ff0000" }}
           />
@@ -208,7 +248,7 @@ const TabNavigator = createMaterialBottomTabNavigator({
   Trips: {
     screen: Trips,
     navigationOptions: {
-      tabBarLabel: "Trips",
+      tabBarLabel: "History",
       activeColor: "#ff0000",
       inactiveColor: "#000000",
       shifting: false,
@@ -217,7 +257,7 @@ const TabNavigator = createMaterialBottomTabNavigator({
       tabBarIcon: () => (
         <View>
           <Icon
-            name={"tripadvisor"}
+            name={"history"}
             type={"font-awesome"}
             size={25}
             style={{ color: "#ff0000" }}
@@ -248,5 +288,5 @@ const TabNavigator = createMaterialBottomTabNavigator({
     },
   },
 });
-
+ 
 export default createAppContainer(TabNavigator);

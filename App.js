@@ -9,6 +9,7 @@ import Profile from "./src/screens/Profile";
 import ListScreen from "./src/screens/flatlist";
 import React from "react";
 import { BlogProvider } from "./src/context/blogContext";
+import SplashComponent from "./src/components/SplashComponent";
 
 const navigator = createStackNavigator(
   {
@@ -19,11 +20,12 @@ const navigator = createStackNavigator(
     ForgetPassword: ForgetPassword,
     ResponseForgetPassword: ResponseForgetPassword,
     Profile: Profile,
+    Welcome:SplashComponent
   },
   {
-    initialRouteName: "Home",
-    defaultNavigationOptions: {
-      title: "App",
+      initialRouteName: "Welcome",
+      defaultNavigationOptions: {
+      title: "Home",
     },
 
     headerMode: "screen",
