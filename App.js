@@ -6,6 +6,7 @@ import LogIn from "./src/screens/LogIn";
 import ForgetPassword from "./src/screens/ForgetPassword";
 import ResponseForgetPassword from "./src/screens/ResponseForgetPassword";
 import Profile from "./src/screens/Profile";
+import SplashComponent from "./src/components/SplashComponent";
 
 const navigator = createStackNavigator(
   {
@@ -14,12 +15,13 @@ const navigator = createStackNavigator(
     LogIn: LogIn,
     ForgetPassword: ForgetPassword,
     ResponseForgetPassword: ResponseForgetPassword,
-    Profile:Profile
+    Profile: Profile,
+    Welcome:SplashComponent
   },
   {
       initialRouteName: "Home",
       defaultNavigationOptions: {
-      title: "App",
+      title: "Home",
     },
 
       headerMode: "screen",

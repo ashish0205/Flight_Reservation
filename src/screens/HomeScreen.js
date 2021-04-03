@@ -1,180 +1,264 @@
-import React,{Component} from "react";
-import { Text, View, StyleSheet, Button,SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Button, View, Dimensions, Text} from "react-native";
+import { createAppContainer } from "react-navigation";
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { Icon } from "react-native-elements";
+import { Switch } from 'react-native-switch';
 
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { Icon } from 'react-native-elements';
-import DateTimePicker from 'react-native-datepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-import ImageDetails from "../components/ImageDetails";
 import Explore from "./Explore";
 import Trips from "./Trips";
 import Profile from "./Profile";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native-paper";
+import { widthPercentageToDP } from "react-native-responsive-screen";
+import { render } from "react-dom";
 
-class HomeScreen extends Component{
-  constructor(props) {
-    super(props)
-    this.state={date:"2020-05-15"}
-  }
-  render() {    
-        return (
-            <View style={styles.container}>
-              <ImageDetails imageSource={require("../../assets/home.jpeg")} />
-              <View style={styles.space} />            
-              <Text style={styles.text}>Plan a trip</Text>
-              <View style={styles.space} />
-            <Text style={styles.textHeading}>From City
-             <TextInput
-                style={styles.inputtext}
-                placeholder="Select city"
-                placeholderTextColor="#003f5c"
-                autoCorrect={false}
+const HomeScreen = () => {
+
+  const [departuretext, setDepText] = React.useState("");
+  const [arrivaltext, setArvText] = React.useState("");
+  const [date, setDate] = React.useState(new Date(1598051730000));
+  const [mode, setMode] = React.useState("date");
+  const [show, setShow] = React.useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+   
+  return (
+      
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.header_text}>Search Your Flight</Text>
+      </View>
+      <View style={styles.footer}>
+      <View style={styles.row}> 
+        <View style={styles.inputWrap}>
+          <TextInput
+            label="Departure"
+            value={departuretext}
+            onChangeText={(dep) => setDepText(dep)}
+            type="flat"
+          />
+        </View>
+        <View style={styles.inputWrap}>
+          <TextInput
+            label="Arrival"
+            value={arrivaltext}
+            onChangeText={(arrival) => setArvText(arrival)}
+          />
+        </View>
+
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.inputdate}>
+            <Text>Departure</Text>
+            <Button onPress={showDatepicker} title="Select Departure Date" />
+
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
               />
-            </Text>
-            <Text style={styles.textHeading}>To City
-             <TextInput
-                style={styles.inputtext}
-                placeholder="Select city"
-                placeholderTextColor="#003f5c"
-                autoCorrect={false}
+            )}
+          </View>
+          <View style={styles.inputdate}  style={{display: isEnabled ? 'block' : 'none' }} >
+            <Text>Return</Text>
+            <Button onPress={showDatepicker} title="Select Return Date" />
+
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+               
               />
-            </Text>
-            <DateTimePicker
-              style={{width:200}}
-              date={this.state.date} 
-            mode="date" 
-            placeholder="select date"
-            format="YYYY-MM-DD"
-             minDate="2016-05-01"
-             maxDate="2022-06-01"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                //display: 'none',
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0,
-              },
-              dateInput: {
-                marginLeft: 36,
-              },
-            }}
-            onDateChange={(date) => {
-              this.setState({date:date})
-            }}/>
-            </View>
-            
-          );
-    }
-}
+            )}
+          </View>
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.toggle}>
+            <Switch
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}                  
+            />
+              <Text>Two Way</Text>
+          </View>        
+        </View>
+        <View style={{ flexDirection: 'row',margin:30 }}>
+          <Button
+          title="Search"
+          ></Button>
+        </View>
+      </View>
+      </View> 
+      </View>
+    );
+};
 
 const styles = StyleSheet.create({
-    text: {
-      fontSize: 40,
+  container: {
+    flex: 1,
+    backgroundColor: "#05375a",
   },
-  textHeading: {
-    fontSize: 18,
-    fontWeight:"bold"
-  },
-    button: {
-      margin: 20,
-      padding: 30,
-    },
-    space: {
-      width: 40,
-      height: 40,
-    },
-    container: {
-      display:"flex",
-      backgroundColor: '#ffffff',
-      alignItems: "center",
-      justifyContent: "center",
+  
+    row: {
+      flex: 1,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
       marginTop: 10,
-      padding: 20,
-      
+    },
+  
+  header: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    marginTop:10
   },
-  inputtext: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderWidth: 2, 
-    borderColor: 'grey',
-    margin:5
-    }
-  });
- 
+  header_text: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color:'white'
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    marginTop:50
+  },
+  inputWrap: {
+    width: '45%',
+    margin:10
+  },
+  inputdate: {
+    margin: 10,
+    color: "#6a4595",
+    
+  },
+  inputcvv: {
+    fontSize: 14,
+    marginBottom: -12,
+    color: "#6a4595",
+  },
+  toggle: {
+    margin: 30,    
+  }
+});
 
-
-const TabNavigator = createMaterialBottomTabNavigator(
-      {   
-        HomeScreen: {
-            screen: HomeScreen,
-              navigationOptions: {
-                  tabBarLabel: 'Home',
-                  activeColor: '#ff0000',
-                inactiveColor: '#000000',
-                shifting: false,
-                labeled: true,
-                  barStyle: { backgroundColor: '#67baf6' },
-                  tabBarIcon: () => (
-                      <View>
-                          <Icon name={'home'} type={'font-awesome'} size={25} style={{ color: '#ff0000' }}/>
-                      </View>
-                  )
-        }
+const TabNavigator = createMaterialBottomTabNavigator({
+  HomeScreen: {
+    screen: HomeScreen,
+    navigationOptions: {
+      tabBarLabel: "Home",
+      activeColor: "#ff0000",
+      inactiveColor: "#000000",
+      shifting: false,
+      labeled: true,
+      barStyle: { backgroundColor: "#67baf6" },
+      tabBarIcon: () => (
+        <View>
+          <Icon
+            name={"home"}
+            type={"font-awesome"}
+            size={25}
+            style={{ color: "#ff0000" }}
+          />
+        </View>
+      ),
     },
-    Explore: {
-      screen: Explore,
-        navigationOptions: {
-            tabBarLabel: 'Explore',
-            activeColor: '#ff0000',
-          inactiveColor: '#000000',
-          shifting: false,
-          labeled: true,
-            barStyle: { backgroundColor: '#67baf6' },
-            tabBarIcon: () => (
-                <View>
-                    <Icon name={'explore'} type={'MaterialIcons'} size={25} style={{ color: '#ff0000' }}/>
-                </View>
-          )
-  }
+  },
+  Explore: {
+    screen: Explore,
+    navigationOptions: {
+      tabBarLabel: "Wishlist",
+      activeColor: "#ff0000",
+      inactiveColor: "#000000",
+      shifting: false,
+      labeled: true,
+      barStyle: { backgroundColor: "#67baf6" },
+      tabBarIcon: () => (
+        <View>
+          <Icon
+            name={"heart"}
+            type={"font-awesome"}
+            size={25}
+            style={{ color: "#ff0000" }}
+          />
+        </View>
+      ),
     },
-    Trips: {
-      screen: Trips,
-        navigationOptions: {
-            tabBarLabel: 'Trips',
-            activeColor: '#ff0000',
-          inactiveColor: '#000000',
-          shifting: false,
-          labeled: true,
-            barStyle: { backgroundColor: '#67baf6' },
-            tabBarIcon: () => (
-                <View>
-                    <Icon name={'tripadvisor'} type={'font-awesome'} size={25} style={{ color: '#ff0000' } }/>
-                </View>
-            )
-  }
+  },
+  Trips: {
+    screen: Trips,
+    navigationOptions: {
+      tabBarLabel: "History",
+      activeColor: "#ff0000",
+      inactiveColor: "#000000",
+      shifting: false,
+      labeled: true,
+      barStyle: { backgroundColor: "#67baf6" },
+      tabBarIcon: () => (
+        <View>
+          <Icon
+            name={"history"}
+            type={"font-awesome"}
+            size={25}
+            style={{ color: "#ff0000" }}
+          />
+        </View>
+      ),
     },
-    Profile: {
-      screen: Profile,
-        navigationOptions: {
-            tabBarLabel: 'Profile',
-            activeColor: '#ff0000',
-          inactiveColor: '#000000',
-          shifting: false,
-          labeled: true,
-            barStyle: { backgroundColor: '#67baf6' },
-            tabBarIcon: () => (
-                <View>
-                    <Icon name={'account-circle'} type={'AntDesign'} size={25} style={{ color: '#ff0000' }}/>
-                </View>
-          )
-  }
-    }
-      }    
-)
+  },
+  Profile: {
+    screen: Profile,
+    navigationOptions: {
+      tabBarLabel: "Profile",
+      activeColor: "#ff0000",
+      inactiveColor: "#000000",
+      shifting: false,
+      labeled: true,
+      barStyle: { backgroundColor: "#67baf6" },
+      tabBarIcon: () => (
+        <View>
+          <Icon
+            name={"account-circle"}
+            type={"AntDesign"}
+            size={25}
+            style={{ color: "#ff0000" }}
+          />
+        </View>
+      ),
+    },
+  },
+});
 
 export default createAppContainer(TabNavigator);
-
