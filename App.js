@@ -19,7 +19,7 @@ const navigator = createStackNavigator(
     Welcome:SplashComponent
   },
   {
-      initialRouteName: "Home",
+      initialRouteName: "Welcome",
       defaultNavigationOptions: {
       title: "Home",
     },
