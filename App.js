@@ -6,27 +6,39 @@ import LogIn from "./src/screens/LogIn";
 import ForgetPassword from "./src/screens/ForgetPassword";
 import ResponseForgetPassword from "./src/screens/ResponseForgetPassword";
 import Profile from "./src/screens/Profile";
+import ListScreen from "./src/screens/flatlist";
+import React from "react";
+import { BlogProvider } from "./src/context/blogContext";
 
 const navigator = createStackNavigator(
   {
     Home: HomeScreen,
+    List: ListScreen,
     SignUp: SignUp,
     LogIn: LogIn,
     ForgetPassword: ForgetPassword,
     ResponseForgetPassword: ResponseForgetPassword,
-    Profile:Profile
+    Profile: Profile,
   },
   {
-      initialRouteName: "Home",
-      defaultNavigationOptions: {
+    initialRouteName: "Home",
+    defaultNavigationOptions: {
       title: "App",
     },
 
-      headerMode: "screen",
-      defaultNavigationOptions: {
+    headerMode: "screen",
+    defaultNavigationOptions: {
       cardStyle: { backgroundColor: "#fff" },
     },
   }
 );
 
-export default createAppContainer(navigator);
+const App = createAppContainer(navigator);
+
+export default () => {
+  return (
+    <BlogProvider>
+      <App />
+    </BlogProvider>
+  );
+};
