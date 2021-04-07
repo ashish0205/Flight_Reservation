@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import axios from "axios";
 const QueryString = require("querystring");
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   StyleSheet,
@@ -79,7 +80,10 @@ const LogIn = ({ navigation }) => {
                     }
                   )
                   .then((response) => {
-                    console.log(response.data);
+                    const { user } = response.data;
+                    console.log(user._id);
+                    AsyncStorage.setItem("loginid", user.email);
+                    AsyncStorage.setItem("_id", user._id);
                     navigation.navigate("Home");
                   })
                   .catch((err) => console.log("api Erorr: ", err.response));
