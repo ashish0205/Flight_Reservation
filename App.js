@@ -20,11 +20,11 @@ const navigator = createStackNavigator(
     ForgetPassword: ForgetPassword,
     ResponseForgetPassword: ResponseForgetPassword,
     Profile: Profile,
-    Welcome:SplashComponent
+    Welcome: SplashComponent,
   },
   {
-      initialRouteName: "Welcome",
-      defaultNavigationOptions: {
+    initialRouteName: "Welcome",
+    defaultNavigationOptions: {
       title: "Home",
     },
 
